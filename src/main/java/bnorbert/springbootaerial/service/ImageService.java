@@ -40,7 +40,7 @@ public class ImageService {
         int targetWidth = 416;
         int targetHeight = 416;
 
-        File inputFile = new File("build/files/"+input);
+        File inputFile = new File("src/main/resources/build/files/"+input);
         BufferedImage inputImage = ImageIO.read(inputFile);
         BufferedImage outputImage = new BufferedImage(targetWidth, targetHeight, inputImage.getType());
 
@@ -48,7 +48,7 @@ public class ImageService {
         g2d.drawImage(inputImage, 0, 0, targetWidth, targetHeight, null);
         g2d.dispose();
 
-        File outputFile = new File("build/output/"+input);
+        File outputFile = new File("src/main/resources/build/output/"+input);
         String formatName = input.substring(input.lastIndexOf(".") + 1);
         ImageIO.write(outputImage, formatName, outputFile);
     }
@@ -67,9 +67,9 @@ public class ImageService {
 
         Image image = ImageFactory
                 .getInstance()
-                .fromFile(Paths.get("build/output/"+input));
+                .fromFile(Paths.get("src/main/resources/build/output/"+input));
 
-        Path modelDir = Paths.get("build/model");
+        Path modelDir = Paths.get("src/main/resources/build/model");
 
         Criteria<Image, DetectedObjects> criteria =
                 Criteria.builder()
@@ -85,7 +85,7 @@ public class ImageService {
             try (Predictor<Image, DetectedObjects> predictor = model.newPredictor()) {
                 DetectedObjects detection = predictor.predict(image);
 
-                Path outputDir = Paths.get("build/output");
+                Path outputDir = Paths.get("src/main/resources/build/output");
                 Files.createDirectories(outputDir);
                 drawBoundingBoxes((BufferedImage) image.getWrappedImage(), detection);
                 Path imagePath = outputDir.resolve("detected-object.png");
